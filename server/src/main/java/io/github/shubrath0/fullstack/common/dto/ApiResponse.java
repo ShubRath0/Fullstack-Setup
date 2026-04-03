@@ -9,16 +9,16 @@ public record ApiResponse<T>(
         Integer status,
         Boolean success,
         String message,
-        T data,
-        Instant timestamp) {
+        Instant timestamp,
+        T data) {
     public static <T> ResponseEntity<ApiResponse<T>> success(HttpStatus status, String message, T data) {
         return ResponseEntity.status(status).body(
                 new ApiResponse<T>(
                         status.value(),
                         true,
                         message,
-                        data,
-                        Instant.now()));
+                        Instant.now(),
+                        data));
     }
 
     public static <T> ResponseEntity<ApiResponse<T>> error(HttpStatus status, String message) {
@@ -27,7 +27,7 @@ public record ApiResponse<T>(
                         status.value(),
                         false,
                         message,
-                        null,
-                        Instant.now()));
+                        Instant.now(),
+                        null));
     }
 }

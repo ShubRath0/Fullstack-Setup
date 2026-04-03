@@ -5,24 +5,8 @@
         "name": "FullstackSetupApplication",
         "request": "launch",
         "mainClass": "io.github.shubrath0.fullstack.FullstackSetupApplication",
-        "projectName": "demo"
+        "projectName": "demo",
+        "envFile": "${workspaceFolder}/server/.env"
     },
-    {
-        "type": "java",
-        "name": "ExpressInventoryApplication",
-        "request": "launch",
-        "mainClass": "com.express.inventory.ExpressInventoryApplication",
-        "projectName": "server"
-    },
-    {
-        "type": "java",
-        "name": "Spring Boot-ServerApplication<server>",
-        "request": "launch",
-        "cwd": "${workspaceFolder}",
-        "mainClass": "com.express.inventory.server.ServerApplication",
-        "projectName": "server",
-        "args": "",
-        "envFile": "${workspaceFolder}/.env"
-    }
-]
+],
 }
