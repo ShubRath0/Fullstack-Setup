@@ -1,4 +1,4 @@
-package io.github.shubrath0.fullstack.api.user;
+package io.github.shubrath0.fullstack.api.auth;
 
 import java.util.Optional;
 
@@ -6,19 +6,20 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import io.github.shubrath0.fullstack.api.user.dto.UserDTO;
+import io.github.shubrath0.fullstack.api.auth.dto.request.CreateUserRequest;
+import io.github.shubrath0.fullstack.api.auth.dto.request.LoginRequest;
+import io.github.shubrath0.fullstack.api.auth.dto.response.AuthenticationResponse;
+import io.github.shubrath0.fullstack.api.auth.exceptions.InvalidCredentialsException;
+import io.github.shubrath0.fullstack.api.auth.exceptions.UsernameAlreadyTakenException;
+import io.github.shubrath0.fullstack.api.user.User;
+import io.github.shubrath0.fullstack.api.user.UserRepository;
 import io.github.shubrath0.fullstack.api.user.dto.UserMapper;
-import io.github.shubrath0.fullstack.api.user.dto.request.CreateUserRequest;
-import io.github.shubrath0.fullstack.api.user.dto.request.LoginRequest;
-import io.github.shubrath0.fullstack.api.user.dto.response.AuthenticationResponse;
-import io.github.shubrath0.fullstack.api.user.exceptions.InvalidCredentialsException;
-import io.github.shubrath0.fullstack.api.user.exceptions.UsernameAlreadyTakenException;
 import io.github.shubrath0.fullstack.security.JwtService;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class AuthService {
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
@@ -39,13 +40,16 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public UserDTO login(LoginRequest request) {
+    public AuthenticationResponse login(LoginRequest request) {
         Optional<User> user = repository.findByUsername(request.username());
 
-        if (user.isEmpty() || !passwordEncoder.matches(request.password(), user.get().password)) {
+        User foundUser = user.orElseThrow(InvalidCredentialsException::new);
+        if (!passwordEncoder.matches(request.password(), foundUser.getPassword())) {
             throw new InvalidCredentialsException();
         }
 
-        return userMapper.toDto(user.get());
+        String jwtToken = jwtService.generateToken(foundUser);
+
+        return new AuthenticationResponse(jwtToken, userMapper.toDto(foundUser));
     }
 }

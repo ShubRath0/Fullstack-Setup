@@ -6,8 +6,8 @@ import org.mapstruct.Named;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import io.github.shubrath0.fullstack.api.auth.dto.request.CreateUserRequest;
 import io.github.shubrath0.fullstack.api.user.User;
-import io.github.shubrath0.fullstack.api.user.dto.request.CreateUserRequest;
 
 @Mapper(componentModel = "spring")
 public abstract class UserMapper {
