@@ -9,8 +9,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import io.github.shubrath0.fullstack.api.auth.exceptions.EmailAlreadyTakenException;
 import io.github.shubrath0.fullstack.api.auth.exceptions.InvalidCredentialsException;
-import io.github.shubrath0.fullstack.api.auth.exceptions.UsernameAlreadyTakenException;
 import io.github.shubrath0.fullstack.common.dto.ApiResponse;
 import io.github.shubrath0.fullstack.common.dto.FieldError;
 import lombok.extern.slf4j.Slf4j;
@@ -36,8 +36,8 @@ public class GlobalExceptionHandler {
         return ApiResponse.error(HttpStatus.BAD_REQUEST, "Validation Failed", fieldErrors);
     }
 
-    @ExceptionHandler(UsernameAlreadyTakenException.class)
-    public ResponseEntity<ApiResponse<String>> handleUsernameAlreadyTaken(UsernameAlreadyTakenException ex) {
+    @ExceptionHandler(EmailAlreadyTakenException.class)
+    public ResponseEntity<ApiResponse<String>> handleUsernameAlreadyTaken(EmailAlreadyTakenException ex) {
         return ApiResponse.error(HttpStatus.CONFLICT, ex.getMessage());
     }
 

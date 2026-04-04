@@ -9,8 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import io.github.shubrath0.fullstack.api.auth.dto.request.CreateUserRequest;
 import io.github.shubrath0.fullstack.api.auth.dto.request.LoginRequest;
 import io.github.shubrath0.fullstack.api.auth.dto.response.AuthenticationResponse;
+import io.github.shubrath0.fullstack.api.auth.exceptions.EmailAlreadyTakenException;
 import io.github.shubrath0.fullstack.api.auth.exceptions.InvalidCredentialsException;
-import io.github.shubrath0.fullstack.api.auth.exceptions.UsernameAlreadyTakenException;
 import io.github.shubrath0.fullstack.api.user.User;
 import io.github.shubrath0.fullstack.api.user.UserRepository;
 import io.github.shubrath0.fullstack.api.user.dto.UserMapper;
@@ -27,8 +27,8 @@ public class AuthService {
 
     @Transactional
     public AuthenticationResponse createUser(CreateUserRequest request) {
-        if (repository.existsByUsername(request.username())) {
-            throw new UsernameAlreadyTakenException(request.username());
+        if (repository.existsByEmail(request.email())) {
+            throw new EmailAlreadyTakenException(request.email());
         }
 
         User user = userMapper.toEntity(request);
@@ -41,7 +41,7 @@ public class AuthService {
 
     @Transactional(readOnly = true)
     public AuthenticationResponse login(LoginRequest request) {
-        Optional<User> user = repository.findByUsername(request.username());
+        Optional<User> user = repository.findByEmail(request.email());
 
         User foundUser = user.orElseThrow(InvalidCredentialsException::new);
         if (!passwordEncoder.matches(request.password(), foundUser.getPassword())) {
