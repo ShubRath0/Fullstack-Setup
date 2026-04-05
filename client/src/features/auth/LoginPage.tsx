@@ -1,10 +1,10 @@
-import { Container } from "@/components/Container";
-import { ThemeToggle } from "@/components/ThemeToggle";
-import type { LoginRequest } from "@/features/auth/api/types/auth.request";
+import { ThemeToggle } from "@/components";
+import type { LoginRequest } from "@/features/auth/api";
 import { GeneralForm } from "@/features/auth/components/Form";
-import { useAppDispatch } from "@/hook/hooks";
-import { useLogin } from "@/hook/useAuth";
+import { useAppDispatch, useLogin } from "@/hooks";
+
 import { Card, Link } from "@heroui/react";
+import { Container } from "lucide-react";
 import { type SubmitHandler } from "react-hook-form";
 import toast from 'react-hot-toast';
 import { useNavigate } from "react-router-dom";

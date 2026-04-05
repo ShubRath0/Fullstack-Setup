@@ -1,8 +1,7 @@
-import { Container } from "@/components/Container";
-import { SignOut } from "@/components/SignOut";
-import { ThemeToggle } from "@/components/ThemeToggle";
-import { useAppSelector } from "@/hook/hooks";
+import { SignOut, ThemeToggle } from "@/components";
+import { useAppSelector } from "@/hooks";
 import { Card, Separator } from "@heroui/react";
+import { Container } from "lucide-react";
 
 export const Home = () => {
     const { id, email, role } = useAppSelector(state => state.user);

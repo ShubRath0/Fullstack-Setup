@@ -15,7 +15,7 @@ interface UserState extends Partial<UserData> {
 const initialState: UserState = {
     id: null,
     email: null,
-    token: localStorage.getItem("token"),
+    token: localStorage.getItem("token") ?? null,
     role: null,
     isInitialized: false
 };
@@ -30,20 +30,24 @@ const userSlice = createSlice({
             state.token = action.payload.token;
             state.role = action.payload.role;
             state.isInitialized = true;
-            localStorage.setItem("token", action.payload.token!);
         },
         setInitialized: (state) => {
             state.isInitialized = true;
         },
-        setUser: (state, action: PayloadAction<Omit<UserData, 'token'>>) => {
+        setUser: (state, action: PayloadAction<UserData>) => {
             state.id = action.payload.id;
             state.email = action.payload.email;
             state.role = action.payload.role;
             state.isInitialized = true;
         },
         logout: () => {
-            localStorage.removeItem("token");
-            return initialState;
+            return {
+                id: null,
+                email: null,
+                token: null,
+                role: null,
+                isInitialized: true
+            };
         }
     }
 });

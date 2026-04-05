@@ -1,4 +1,4 @@
-import { useLogout } from "@/hook/useAuth";
+import { useLogout } from "@/hooks";
 import { Button } from "@heroui/react";
 import toast from "react-hot-toast";
 
@@ -9,7 +9,7 @@ export const SignOut = () => {
         await toast.promise(mutateAsync(), {
             loading: "Logging out...",
             success: "Logged out",
-            error: "Could not log out"
+            error: "Logged out"
         });
     };
 

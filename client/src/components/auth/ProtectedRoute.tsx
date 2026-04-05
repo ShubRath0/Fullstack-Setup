@@ -1,4 +1,4 @@
-import { useAppSelector } from "@/hook/hooks";
+import { useAppSelector } from "@/hooks";
 import { selectIsAuthenticated, selectIsAuthLoading } from "@/state/userslice";
 import { Spinner } from "@heroui/react";
 import { Navigate, Outlet } from "react-router-dom";

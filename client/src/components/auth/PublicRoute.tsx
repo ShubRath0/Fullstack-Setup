@@ -1,6 +1,6 @@
-import { Container } from "@/components/Container";
-import { useAppSelector } from "@/hook/hooks";
+import { useAppSelector } from "@/hooks";
 import { Spinner } from "@heroui/react";
+import { Container } from "lucide-react";
 import { Navigate, Outlet } from "react-router-dom";
 
 export const PublicRoute = () => {

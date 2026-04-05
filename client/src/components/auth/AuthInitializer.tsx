@@ -1,4 +1,4 @@
-import { useAppDispatch, useAppSelector } from "@/hook/hooks";
+import { useAppDispatch, useAppSelector } from "@/hooks";
 import { api } from "@/lib/axios";
 import { logout, setInitialized, setUser } from "@/state/userslice";
 import { useEffect } from "react";

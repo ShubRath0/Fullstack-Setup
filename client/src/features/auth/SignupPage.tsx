@@ -1,8 +1,8 @@
-import { Container } from "@/components/Container";
-import { ThemeToggle } from "@/components/ThemeToggle";
-import type { LoginRequest } from "@/features/auth/api/types/auth.request";
+import { Container, ThemeToggle } from "@/components";
+import type { LoginRequest } from "@/features/auth/api";
 import { GeneralForm } from "@/features/auth/components/Form";
-import { useSignup } from "@/hook/useAuth";
+import { useSignup } from "@/hooks";
+
 import { Card, Link } from "@heroui/react";
 import { type SubmitHandler } from "react-hook-form";
 import toast from 'react-hot-toast';

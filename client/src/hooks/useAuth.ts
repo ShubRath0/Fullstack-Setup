@@ -1,9 +1,5 @@
-import type { ApiResponse } from "@/api/api.types";
-import { createUser } from "@/features/auth/api/create-user";
-import { loginApi } from "@/features/auth/api/login";
-import { logoutApi } from "@/features/auth/api/logout";
-import type { CreateAccountRequest, LoginRequest } from "@/features/auth/api/types/auth.request";
-import type { AuthDetails } from "@/features/auth/api/types/auth.types";
+import type { ApiResponse } from "@/api";
+import { createUser, loginApi, logoutApi, type AuthDetails, type CreateAccountRequest, type LoginRequest } from "@/features/auth/api";
 import { login, logout } from "@/state/userslice";
 import { useMutation } from "@tanstack/react-query";
 import { useDispatch } from "react-redux";
@@ -29,6 +25,7 @@ export const useLogin = () => {
         mutationFn: (data: LoginRequest) => loginApi(data),
         onSuccess: (response: ApiResponse<AuthDetails>) => {
             const { user, token } = response.data;
+            localStorage.setItem("token", token);
             dispatch(login({ ...user, token }));
             navigate("/home");
         }
@@ -40,8 +37,9 @@ export const useLogout = () => {
     const dispatch = useDispatch();
     return useMutation({
         mutationFn: logoutApi,
-        onSuccess: () => {
+        onSettled: () => {
             dispatch(logout());
+            localStorage.removeItem("token");
             navigate("/login");
         }
     });
