@@ -10,8 +10,15 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 export const useSignup = () => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     return useMutation({
-        mutationFn: (data: CreateAccountRequest) => createUser(data)
+        mutationFn: (data: CreateAccountRequest) => createUser(data),
+        onSuccess: (response: ApiResponse<AuthDetails>) => {
+            const { user, token } = response.data;
+            dispatch(login({ ...user, token }));
+            navigate("/home");
+        }
     });
 };
 
