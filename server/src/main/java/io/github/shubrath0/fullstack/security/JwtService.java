@@ -19,11 +19,17 @@ import io.jsonwebtoken.security.Keys;
 @Service
 public class JwtService {
 
+    private final JwtBlacklistService jwtBlacklistService;
+
     @Value("${application.security.jwt.secret-key}")
     private String secretKey;
 
     @Value("${application.security.jwt.expiration}")
     private long jwtExpiration;
+
+    JwtService(JwtBlacklistService jwtBlacklistService) {
+        this.jwtBlacklistService = jwtBlacklistService;
+    }
 
     public String generateToken(UserDetails userDetails) {
         List<String> roles = userDetails.getAuthorities().stream()
@@ -37,6 +43,13 @@ public class JwtService {
                 .expiration(new Date(System.currentTimeMillis() + jwtExpiration))
                 .signWith(getSignInKey())
                 .compact();
+    }
+
+    public void blacklistToken(String authHeader) {
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String token = authHeader.substring(7);
+            jwtBlacklistService.blacklistToken(token);
+        }
     }
 
     public Boolean isTokenValid(String token, UserDetails userDetails) {
