@@ -1,20 +1,31 @@
+import { AuthInitializer } from "@/components/AuthInitializer";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
-import { Test } from "@/components/Test";
-import { createBrowserRouter } from "react-router-dom";
+import { LoginPage } from "@/features/auth/LoginPage";
+import { SignupPage } from "@/features/auth/SignupPage.";
+import { Home } from "@/pages/Home";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 
 export const router = createBrowserRouter([
     // PUBLIC ROUTES
     {
         path: "/",
-        element: <Test />,
+        element: <Navigate to="/login" replace />,
+    },
+    {
+        path: "/login",
+        element: <LoginPage />,
+    },
+    {
+        path: "/signup",
+        element: <SignupPage />
     },
     // PROTECTED ROUTES
     {
-        element: <ProtectedRoute />,
+        element: <AuthInitializer><ProtectedRoute /></AuthInitializer>,
         children: [
             {
-                path: "/test",
-                element: <div>This is protected</div>
+                path: "/home",
+                element: <Home />
             }
         ]
     }

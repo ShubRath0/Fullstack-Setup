@@ -1,7 +1,13 @@
-import { createUser } from "@/api/auth/create-user";
-import { login } from "@/api/auth/login";
-import type { CreateAccountRequest, LoginRequest } from "@/api/auth/types/auth.request";
+import type { ApiResponse } from "@/api/api.types";
+import { createUser } from "@/features/auth/api/create-user";
+import { loginApi } from "@/features/auth/api/login";
+import { logoutApi } from "@/features/auth/api/logout";
+import type { CreateAccountRequest, LoginRequest } from "@/features/auth/api/types/auth.request";
+import type { AuthDetails } from "@/features/auth/api/types/auth.types";
+import { login, logout } from "@/state/userslice";
 import { useMutation } from "@tanstack/react-query";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 export const useSignup = () => {
     return useMutation({
@@ -10,7 +16,26 @@ export const useSignup = () => {
 };
 
 export const useLogin = () => {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
     return useMutation({
-        mutationFn: (data: LoginRequest) => login(data)
+        mutationFn: (data: LoginRequest) => loginApi(data),
+        onSuccess: (response: ApiResponse<AuthDetails>) => {
+            const { user, token } = response.data;
+            dispatch(login({ ...user, token }));
+            navigate("/home");
+        }
+    });
+};
+
+export const useLogout = () => {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    return useMutation({
+        mutationFn: logoutApi,
+        onSuccess: () => {
+            dispatch(logout());
+            navigate("/login");
+        }
     });
 };
